@@ -1,11 +1,12 @@
-﻿# Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-COPY . .
-RUN dotnet publish -c Release -o out
-
-# Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+RUN apt-get update && apt-get install -y git openssh-client && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-COPY --from=build /app/out ./
-ENTRYPOINT ["dotnet", "RobBiancoBE.dll"]
+
+# Copia lo script e la chiave SSH
+COPY entrypoint.sh /entrypoint.sh
+COPY ssh /app/ssh
+RUN chmod +x /entrypoint.sh && chmod 600 /app/ssh/id_ed25519
+
+ENTRYPOINT ["/entrypoint.sh"]
