@@ -4,7 +4,7 @@ using RobBiancoBE.Hardware;
 namespace RobBiancoBE.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 public class HardwareController : ControllerBase
 {
     private readonly HardwareMonitorService _monitorService;
