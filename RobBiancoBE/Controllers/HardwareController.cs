@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RobBiancoBE.DTOs;
 using RobBiancoBE.Hardware;
 
 namespace RobBiancoBE.Controllers;
@@ -7,17 +8,17 @@ namespace RobBiancoBE.Controllers;
 [Route("api/[controller]")]
 public class HardwareController : ControllerBase
 {
-    private readonly HardwareMonitorService _monitorService;
+    private readonly ILogger<HardwareController> _logger;
 
-    public HardwareController(HardwareMonitorService monitorService)
+    public HardwareController(ILogger<HardwareController> logger)
     {
-        _monitorService = monitorService;
+        _logger = logger;
     }
 
     [HttpGet("sensors")]
-    public IActionResult GetSensors()
+    public IEnumerable<HardwareSensorDto> Get()
     {
-        var data = _monitorService.GetAllSensors();
-        return Ok(data);
+        var data = new HardwareMonitorService().GetAllSensors();
+        return data;
     }
 }

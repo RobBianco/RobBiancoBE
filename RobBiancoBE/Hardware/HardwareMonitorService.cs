@@ -40,16 +40,16 @@ public class HardwareMonitorService
     {
         foreach (var sensor in hardware.Sensors)
         {
-            if (sensor.Value != null)
+            if (!(sensor?.Value != null))
+                continue;
+
+            sensors.Add(new HardwareSensorDto
             {
-                sensors.Add(new HardwareSensorDto
-                {
-                    Hardware = hardware.Name,
-                    SensorName = sensor.Name,
-                    SensorType = sensor.SensorType.ToString(),
-                    Value = sensor.Value.Value
-                });
-            }
+                Hardware = hardware.Name,
+                SensorName = sensor.Name,
+                SensorType = sensor.SensorType.ToString(),
+                Value = sensor.Value.Value.ToString("F2") ?? "???"
+            });
         }
 
         foreach (var sub in hardware.SubHardware)
